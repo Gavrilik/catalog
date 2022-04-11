@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateCatalogDto } from './dto/create-catalog.dto';
 import { UpdateCatalogDto } from './dto/update-catalog.dto';
+import { Catalog } from './entities/catalog.entity';
 
 @Injectable()
 export class CatalogService {
+  constructor(
+    @InjectRepository(Catalog)
+    private catalogRepository: Repository<Catalog>,
+  ) {}
   create(createCatalogDto: CreateCatalogDto) {
-    return 'This action adds a new catalog';
+    const catalog = this.catalogRepository.create(createCatalogDto);
+    return this.catalogRepository.save(catalog);
   }
 
   findAll() {
-    return `This action returns all catalog`;
+    return this.catalogRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} catalog`;
+    return this.catalogRepository.findOne(id);
   }
 
   update(id: number, updateCatalogDto: UpdateCatalogDto) {
-    return `This action updates a #${id} catalog`;
+    this.catalogRepository.update(id, updateCatalogDto);
+    return this.catalogRepository.findOne(id);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} catalog`;
+    this.catalogRepository.delete(id);
+    return this.catalogRepository.findOne(id);
   }
 }

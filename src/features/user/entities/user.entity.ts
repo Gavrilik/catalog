@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Catalog } from 'src/features/catalog/entities/catalog.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -16,4 +23,8 @@ export class User {
 
   @Column({ nullable: false })
   password: string;
+
+  @ManyToMany(() => Catalog, (catalog) => catalog.users)
+  @JoinTable()
+  catalogs: Catalog[];
 }

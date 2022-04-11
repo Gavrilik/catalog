@@ -7,4 +7,6 @@ export class CreateUserDto {
   phone: number;
 
   readonly password: string;
+
+  carsIds: number[];
 }

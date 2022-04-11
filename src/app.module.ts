@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CatalogModule } from './features/catalog/catalog.module';
+import { Catalog } from './features/catalog/entities/catalog.entity';
 import { User } from './features/user/entities/user.entity';
 import { UserModule } from './features/user/user.module';
 
@@ -15,7 +16,7 @@ import { UserModule } from './features/user/user.module';
       username: process.env.POSTGRESS_USER,
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRESS_DB,
-      entities: [User],
+      entities: [User, Catalog],
       synchronize: true,
     }),
     UserModule,
