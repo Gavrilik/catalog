@@ -33,4 +33,9 @@ export class UserService {
     this.userRepository.delete(id);
     return this.userRepository.findOne(id);
   }
+
+  getUserByEmail(email: string) {
+    const user = this.userRepository.findOne({ where: { email } }); // поиск пользователя по email
+    return user;
+  }
 }

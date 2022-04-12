@@ -5,6 +5,8 @@ import { CatalogModule } from './features/catalog/catalog.module';
 import { Catalog } from './features/catalog/entities/catalog.entity';
 import { User } from './features/user/entities/user.entity';
 import { UserModule } from './features/user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { UserService } from './features/user/user.service';
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import { UserModule } from './features/user/user.module';
     }),
     UserModule,
     CatalogModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

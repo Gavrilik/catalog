@@ -9,5 +9,6 @@ import { Catalog } from '../catalog/entities/catalog.entity';
   imports: [TypeOrmModule.forFeature([User, Catalog])],
   controllers: [UserController],
   providers: [UserService],
+  exports: [UserService],
 })
 export class UserModule {}
