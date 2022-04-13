@@ -7,8 +7,10 @@ import {
   Delete,
   Put,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { CatalogService } from './catalog.service';
 import { CreateCatalogDto } from './dto/create-catalog.dto';
 import { UpdateCatalogDto } from './dto/update-catalog.dto';
@@ -19,6 +21,7 @@ export class CatalogController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
   create(@Body() createCatalogDto: CreateCatalogDto) {
     return this.catalogService.create(createCatalogDto);
   }
@@ -36,6 +39,7 @@ export class CatalogController {
 
   @Put(':id')
   @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
   update(@Param('id') id: string, @Body() updateCatalogDto: UpdateCatalogDto) {
     return this.catalogService.update(+id, updateCatalogDto);
   }
