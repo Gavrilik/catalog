@@ -5,10 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Catalog } from '../catalog/entities/catalog.entity';
 import { AuthModule } from 'src/auth/auth.module';
+import { Role } from '../roles/entities/role.entity';
+import { UserRoles } from '../roles/user-roles';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Catalog]),
+    TypeOrmModule.forFeature([User, Catalog, Role, UserRoles]),
     forwardRef(() => AuthModule), // предотвращение кольцевой зависимости
   ],
   controllers: [UserController],

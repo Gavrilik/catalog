@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { CatalogService } from './catalog.service';
 import { CatalogController } from './catalog.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,10 +7,7 @@ import { User } from '../user/entities/user.entity';
 import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Catalog, User]),
-    forwardRef(() => AuthModule),
-  ],
+  imports: [TypeOrmModule.forFeature([Catalog, User]), AuthModule],
   controllers: [CatalogController],
   providers: [CatalogService],
 })

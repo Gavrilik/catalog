@@ -6,7 +6,8 @@ import { Catalog } from './features/catalog/entities/catalog.entity';
 import { User } from './features/user/entities/user.entity';
 import { UserModule } from './features/user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { UserService } from './features/user/user.service';
+import { Role } from './features/roles/entities/role.entity';
+import { UserRoles } from './features/roles/user-roles';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { UserService } from './features/user/user.service';
       username: process.env.POSTGRESS_USER,
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRESS_DB,
-      entities: [User, Catalog],
+      entities: [User, Catalog, Role, UserRoles],
+      autoLoadEntities: true,
       synchronize: true,
     }),
     UserModule,

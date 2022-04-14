@@ -35,7 +35,6 @@ export class UserService {
   }
 
   getUserByEmail(email: string) {
-    const user = this.userRepository.findOne({ where: { email } }); // поиск пользователя по email
-    return user;
+    return this.userRepository.findOne({ where: { email } }); // поиск пользователя по email
   }
 }
