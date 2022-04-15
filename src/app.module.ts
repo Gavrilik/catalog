@@ -7,7 +7,8 @@ import { User } from './features/user/entities/user.entity';
 import { UserModule } from './features/user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { Role } from './features/roles/entities/role.entity';
-import { UserRoles } from './features/roles/user-roles';
+import { UserRoles } from './features/roles/entities/user-roles';
+import { RolesModule } from './features/roles/roles.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UserRoles } from './features/roles/user-roles';
     UserModule,
     CatalogModule,
     AuthModule,
+    RolesModule,
   ],
   controllers: [],
   providers: [],

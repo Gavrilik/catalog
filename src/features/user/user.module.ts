@@ -6,12 +6,15 @@ import { User } from './entities/user.entity';
 import { Catalog } from '../catalog/entities/catalog.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { Role } from '../roles/entities/role.entity';
-import { UserRoles } from '../roles/user-roles';
+import { UserRoles } from '../roles/entities/user-roles';
+import { RolesModule } from '../roles/roles.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Catalog, Role, UserRoles]),
-    forwardRef(() => AuthModule), // предотвращение кольцевой зависимости
+    forwardRef(() => AuthModule),
+    RolesModule,
+    // предотвращение кольцевой зависимости
   ],
   controllers: [UserController],
   providers: [UserService],

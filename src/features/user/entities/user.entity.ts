@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Catalog } from 'src/features/catalog/entities/catalog.entity';
 import { Role } from 'src/features/roles/entities/role.entity';
-import { UserRoles } from 'src/features/roles/user-roles';
+import { UserRoles } from 'src/features/roles/entities/user-roles';
 import {
   Column,
   Entity,
