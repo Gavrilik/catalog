@@ -25,4 +25,5 @@ export class CreateUserDto {
   readonly password: string;
 
   carsIds: number[];
+  then: any;
 }

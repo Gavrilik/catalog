@@ -1,4 +1,6 @@
+import { SerializeOptions } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import { Catalog } from 'src/features/catalog/entities/catalog.entity';
 import { Role } from 'src/features/roles/entities/role.entity';
 import { UserRoles } from 'src/features/roles/entities/user-roles';
@@ -28,7 +30,7 @@ export class User {
   @ApiProperty({ example: '331234567' })
   phone: number;
 
-  @Column({ nullable: false, select: false })
+  @Column({ nullable: false })
   @ApiProperty({ example: '1234' })
   password: string;
 

@@ -16,12 +16,17 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-  findAll() {
-    return this.userRepository.find();
+  async findAll() {
+    const users: User[] = await this.userRepository.find();
+    const [...rest] = users;
+    //console.log([...rest]);
+    return rest;
   }
 
-  findOne(id: number) {
-    return this.userRepository.findOne(id);
+  async findOne(id: number) {
+    const users: User = await this.userRepository.findOne(id);
+    const { password, ...rest } = users;
+    return rest;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

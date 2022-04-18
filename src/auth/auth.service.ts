@@ -17,6 +17,7 @@ export class AuthService {
   ) {}
   async login(createUserDto: CreateUserDto) {
     const user = await this.validateUser(createUserDto);
+
     return this.generateToken(user); //ркзультат выполнения дженерейттокена передали usera
   }
 
@@ -52,6 +53,8 @@ export class AuthService {
       user.password,
     ); //проверка на совпадение пароля (1 параметр пароль из дто 2 параметр пароль от пользователя)
     if (user && passwordEquals) {
+      console.log(user);
+
       //проверка если пользователь и пароль совпадают возвр. пользователя
       return user;
     }
