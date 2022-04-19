@@ -8,6 +8,10 @@ import {
   Put,
   UseGuards,
   UsePipes,
+  HttpException,
+  HttpCode,
+  HttpStatus,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,6 +20,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
+import e from 'express';
 
 @ApiTags('Пользователи') //Тег
 @Controller('user')
@@ -36,16 +41,22 @@ export class UserController {
   @ApiOperation({ summary: 'Получение всех пользователей' })
   @ApiResponse({ status: 200, type: [User] })
   @UseGuards(JwtAuthGuard)
-  findAll() {
-    return this.userService.findAll();
+  async findAll() {
+    const hidePass: User[] = await this.userService.findAll();
+    const [{ password, ...rest }] = hidePass;
+    return rest;
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Получение пользователя по id' })
   @UseGuards(JwtAuthGuard)
   @ApiResponse({ status: 200, type: User })
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const hidePass: User = await this.userService.findOne(+id);
+    const { password, ...rest } = hidePass || {
+      message: 'нету пользователя с таким id',
+    };
+    return rest;
   }
 
   @Put(':id')

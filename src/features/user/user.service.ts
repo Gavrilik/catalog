@@ -17,16 +17,11 @@ export class UserService {
   }
 
   async findAll() {
-    const users: User[] = await this.userRepository.find();
-    const [...rest] = users;
-    //console.log([...rest]);
-    return rest;
+    return await this.userRepository.find();
   }
 
   async findOne(id: number) {
-    const users: User = await this.userRepository.findOne(id);
-    const { password, ...rest } = users;
-    return rest;
+    return this.userRepository.findOne(id);
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

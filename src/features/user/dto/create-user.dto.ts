@@ -24,6 +24,7 @@ export class CreateUserDto {
   })
   readonly password: string;
 
+  @IsString({ message: 'генерируется автоматически' })
+  @ApiProperty()
   carsIds: number[];
-  then: any;
 }
