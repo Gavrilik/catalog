@@ -18,7 +18,7 @@ export class RolesController {
   @Get('/:value')
   @ApiOperation({ summary: 'Получение ролей' })
   @ApiResponse({ status: 200, type: Role })
-  getByValue(@Param('value') value: string) {
-    this.rolesService.getRoleByValue(value);
+  async getByValue(@Param('value') value: string) {
+    return await this.rolesService.getRoleByValue(value);
   }
 }

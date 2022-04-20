@@ -9,9 +9,7 @@ import {
   UseGuards,
   UsePipes,
   HttpException,
-  HttpCode,
   HttpStatus,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -20,7 +18,6 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
-import e from 'express';
 
 @ApiTags('Пользователи') //Тег
 @Controller('user')
@@ -41,10 +38,13 @@ export class UserController {
   @ApiOperation({ summary: 'Получение всех пользователей' })
   @ApiResponse({ status: 200, type: [User] })
   @UseGuards(JwtAuthGuard)
-  async findAll() {
-    const hidePass: User[] = await this.userService.findAll();
-    const [{ password, ...rest }] = hidePass;
-    return rest;
+  async findAll(): Promise<Partial<User>[]> {
+    const users: User[] = await this.userService.findAll();
+    const usersWithoutPass = users.map(function (userObj) {
+      const { password, ...rest } = userObj;
+      return rest;
+    });
+    return usersWithoutPass;
   }
 
   @Get(':id')
@@ -52,10 +52,14 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @ApiResponse({ status: 200, type: User })
   async findOne(@Param('id') id: string) {
-    const hidePass: User = await this.userService.findOne(+id);
-    const { password, ...rest } = hidePass || {
-      message: 'нету пользователя с таким id',
-    };
+    const user: User = await this.userService.findOne(+id);
+    if (!user) {
+      throw new HttpException(
+        'Пользователь с таким id не найден',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const { password, ...rest } = user;
     return rest;
   }
 
@@ -64,7 +68,14 @@ export class UserController {
   @ApiResponse({ status: 200, type: User })
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    const user: User = await this.userService.findOne(+id);
+    if (!user) {
+      throw new HttpException(
+        'Пользователь с таким id не существует',
+        HttpStatus.NOT_FOUND,
+      );
+    }
     return this.userService.update(+id, updateUserDto);
   }
 
@@ -72,7 +83,14 @@ export class UserController {
   @ApiOperation({ summary: 'Удаление пользователя по id' })
   @ApiResponse({ status: 200, type: User })
   @UseGuards(JwtAuthGuard)
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
+    const user: User = await this.userService.findOne(+id);
+    if (!user) {
+      throw new HttpException(
+        'Пользователь с таким id не существует',
+        HttpStatus.NOT_FOUND,
+      );
+    }
     return this.userService.remove(+id);
   }
 }

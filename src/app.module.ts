@@ -7,7 +7,6 @@ import { User } from './features/user/entities/user.entity';
 import { UserModule } from './features/user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { Role } from './features/roles/entities/role.entity';
-import { UserRoles } from './features/roles/entities/user-roles';
 import { RolesModule } from './features/roles/roles.module';
 
 @Module({
@@ -20,7 +19,7 @@ import { RolesModule } from './features/roles/roles.module';
       username: process.env.POSTGRESS_USER,
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRESS_DB,
-      entities: [User, Catalog, Role, UserRoles],
+      entities: [User, Catalog, Role],
       autoLoadEntities: true,
       synchronize: true,
     }),

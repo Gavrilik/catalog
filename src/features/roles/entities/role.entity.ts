@@ -4,10 +4,9 @@ import {
   Column,
   Entity,
   JoinTable,
-  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserRoles } from './user-roles';
 
 @Entity()
 export class Role {
@@ -19,7 +18,7 @@ export class Role {
   @ApiProperty({ example: 'Значение роли пользователя' })
   value: string; //значение роли
 
-  @ManyToMany(() => User, () => UserRoles)
+  @OneToMany(() => User, (user) => user.roles)
   @JoinTable()
   users: User[];
 }

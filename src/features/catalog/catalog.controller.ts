@@ -8,6 +8,8 @@ import {
   Put,
   UseGuards,
   UsePipes,
+  HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -27,23 +29,30 @@ export class CatalogController {
   @UsePipes(ValidationPipe)
   @ApiOperation({ summary: 'Создание новой записи ' })
   @ApiResponse({ status: 200, type: Catalog })
-  create(@Body() createCatalogDto: CreateCatalogDto) {
-    return this.catalogService.create(createCatalogDto);
+  async create(@Body() createCatalogDto: CreateCatalogDto) {
+    return await this.catalogService.create(createCatalogDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Отображение всего каталога' })
   @ApiResponse({ status: 200, type: [Catalog] })
-  findAll() {
-    return this.catalogService.findAll();
+  async findAll() {
+    return await this.catalogService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Отображение записи по id' })
   @ApiResponse({ status: 200, type: Catalog })
   @UseGuards(JwtAuthGuard)
-  findOne(@Param('id') id: string) {
-    return this.catalogService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const catalog: Catalog = await this.catalogService.findOne(+id);
+    if (!catalog) {
+      throw new HttpException(
+        'Автомобиль с таким id не найден',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return catalog;
   }
 
   @Put(':id')
@@ -51,7 +60,17 @@ export class CatalogController {
   @ApiResponse({ status: 200, type: Catalog })
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
-  update(@Param('id') id: string, @Body() updateCatalogDto: UpdateCatalogDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateCatalogDto: UpdateCatalogDto,
+  ) {
+    const catalog: Catalog = await this.catalogService.findOne(+id);
+    if (!catalog) {
+      throw new HttpException(
+        'Автомобиль с таким id не найден',
+        HttpStatus.NOT_FOUND,
+      );
+    }
     return this.catalogService.update(+id, updateCatalogDto);
   }
 
@@ -59,7 +78,14 @@ export class CatalogController {
   @ApiOperation({ summary: 'Удаление записи по id' })
   @ApiResponse({ status: 200, type: Catalog })
   @UseGuards(JwtAuthGuard)
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
+    const catalog: Catalog = await this.catalogService.findOne(+id);
+    if (!catalog) {
+      throw new HttpException(
+        'Автомобиль с таким id не существует',
+        HttpStatus.NOT_FOUND,
+      );
+    }
     return this.catalogService.remove(+id);
   }
 }

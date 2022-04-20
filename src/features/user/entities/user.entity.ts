@@ -1,14 +1,12 @@
-import { SerializeOptions } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
 import { Catalog } from 'src/features/catalog/entities/catalog.entity';
 import { Role } from 'src/features/roles/entities/role.entity';
-import { UserRoles } from 'src/features/roles/entities/user-roles';
 import {
   Column,
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -34,10 +32,6 @@ export class User {
   @ApiProperty({ example: '1234' })
   password: string;
 
-  @ManyToMany(() => Catalog, (catalog) => catalog.users)
-  @JoinTable()
-  catalogs: Catalog[];
-
-  @ManyToMany(() => Role, () => UserRoles)
+  @ManyToOne(() => Role, () => (role) => role.users)
   roles: Role[];
 }

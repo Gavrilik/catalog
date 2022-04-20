@@ -11,10 +11,11 @@ export class RolesService {
   ) {}
 
   createRole(createRoleDto: CreateRoleDto) {
-    return this.roleRepository.create(createRoleDto);
+    const roles = this.roleRepository.create(createRoleDto);
+    return this.roleRepository.save(roles);
   }
 
-  getRoleByValue(value: string) {
-    this.roleRepository.findOne({ where: { value } });
+  async getRoleByValue(value: string) {
+    return await this.roleRepository.findOne({ where: { value } });
   }
 }
