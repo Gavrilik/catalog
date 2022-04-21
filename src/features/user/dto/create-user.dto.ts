@@ -23,8 +23,4 @@ export class CreateUserDto {
     message: ' пароль должен быть не меньше 4 и не больше 16 символов',
   })
   readonly password: string;
-
-  @IsString({ message: 'генерируется автоматически' })
-  @ApiProperty()
-  carsIds: number[];
 }

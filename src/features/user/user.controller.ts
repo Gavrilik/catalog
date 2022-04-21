@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Param,
   Delete,
@@ -12,7 +11,6 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
@@ -23,16 +21,6 @@ import { User } from './entities/user.entity';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {} // внедрение зависимости(dependency enjection)
-
-  @Post() // эндпоит для пользователей
-  @ApiOperation({ summary: 'Создание пользователя' }) // описание
-  @ApiResponse({ status: 200, type: User }) // описывает статус и какие данные вернет
-  @UseGuards(JwtAuthGuard) //использовали useguard(для защиты от неавторизированых пользователей)
-  @UsePipes(ValidationPipe)
-  create(@Body() createUserDto: CreateUserDto) {
-    // тело запроса принимает createuserdto
-    return this.userService.create(createUserDto);
-  }
 
   @Get()
   @ApiOperation({ summary: 'Получение всех пользователей' })

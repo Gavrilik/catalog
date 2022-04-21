@@ -11,6 +11,7 @@ import { RolesModule } from '../roles/roles.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Catalog, Role]),
+    RolesModule,
     forwardRef(() => AuthModule),
     RolesModule,
     // предотвращение кольцевой зависимости

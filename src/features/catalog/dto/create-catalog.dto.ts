@@ -17,6 +17,4 @@ export class CreateCatalogDto {
   @IsNumber({}, { message: 'Введите цену автомобиля числом' })
   @ApiProperty()
   price: number;
-
-  userIds: number[];
 }
