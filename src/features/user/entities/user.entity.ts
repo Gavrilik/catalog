@@ -24,6 +24,9 @@ export class User {
   @ApiProperty({ example: '1234' })
   password: string;
 
+  @Column({ nullable: false })
+  rolesId: number;
+
   @ManyToOne(() => Role, () => (role) => role.users)
   roles: Role[];
 }

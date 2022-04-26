@@ -15,9 +15,9 @@ export class AuthService {
     private userService: UserService,
     private jwtService: JwtService,
   ) {}
+
   async login(createUserDto: CreateUserDto) {
     const user = await this.validateUser(createUserDto);
-
     return this.generateToken(user); //ркзультат выполнения дженерейттокена передали usera
   }
 

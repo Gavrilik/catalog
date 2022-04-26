@@ -16,6 +16,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   //app.useGlobalPipes(new ValidationPipe()); пайпы и гуарды можно использовать глобально для всего приложения
+  //app.useGlobalGuards(new RolesGuard()); защиту по ролям можно ипользовать глобально
   await app.listen(PORT, () => console.log(`Server started on ${PORT}`));
 }
 bootstrap();

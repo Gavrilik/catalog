@@ -9,6 +9,7 @@ import {
   UsePipes,
   HttpException,
   HttpStatus,
+  Post,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -16,16 +17,32 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { RolesGuard } from 'src/auth/roles.guard';
+import { Roles } from 'src/auth/roles.decorator';
 
 @ApiTags('Пользователи') //Тег
 @Controller('user')
+@UseGuards(RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {} // внедрение зависимости(dependency enjection)
 
+  /* @Post() // эндпоит для пользователей
+  @ApiOperation({ summary: 'Создание пользователя' }) // описание
+  @ApiResponse({ status: 200, type: User }) // описывает статус и какие данные вернет
+  @UseGuards(JwtAuthGuard) //использовали useguard(для защиты от неавторизированых пользователей)
+  @UsePipes(ValidationPipe)
+  create(@Body() createUserDto: CreateUserDto) {
+    // тело запроса принимает createuserdto
+    return this.userService.create(createUserDto);
+  }*/
+
+  @Roles('Admin', 'User')
+  @UseGuards(RolesGuard)
   @Get()
   @ApiOperation({ summary: 'Получение всех пользователей' })
   @ApiResponse({ status: 200, type: [User] })
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async findAll(): Promise<Partial<User>[]> {
     const users: User[] = await this.userService.findAll();
     const usersWithoutPass = users.map(function (userObj) {
