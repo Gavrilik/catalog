@@ -33,4 +33,8 @@ export class CatalogService {
     this.catalogRepository.delete(id);
     return this.catalogRepository.findOne(id);
   }
+
+  findByIds(carsIds: number[]) {
+    return this.catalogRepository.findByIds(carsIds);
+  }
 }

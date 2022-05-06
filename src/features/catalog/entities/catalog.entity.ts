@@ -23,4 +23,7 @@ export class Catalog {
   @Column({ nullable: false })
   @ApiProperty({ example: 'Цена автомобиля' })
   price: number;
+
+  @ManyToMany(() => Catalog, (catalog) => catalog.users)
+  users: User[];
 }

@@ -1,4 +1,3 @@
 import { SetMetadata } from '@nestjs/common';
 
-export const ROLES_KEY = 'roles';
-export const Roles = (...roles: string[]) => SetMetadata(ROLES_KEY, roles);
+export const Roles = (...roles: string[]) => SetMetadata('roles', roles); //функция Roles(она будет декоратором) параметром принимает массив ролей вызываем функцию метадата(ключ и массив ролей)

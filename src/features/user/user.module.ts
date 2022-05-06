@@ -7,6 +7,7 @@ import { Catalog } from '../catalog/entities/catalog.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { Role } from '../roles/entities/role.entity';
 import { RolesModule } from '../roles/roles.module';
+import { CatalogModule } from '../catalog/catalog.module';
 
 @Module({
   imports: [
@@ -14,10 +15,11 @@ import { RolesModule } from '../roles/roles.module';
     RolesModule,
     forwardRef(() => AuthModule),
     RolesModule,
+    forwardRef(() => CatalogModule),
     // предотвращение кольцевой зависимости
   ],
   controllers: [UserController],
   providers: [UserService],
-  exports: [UserService],
+  exports: [UserService, TypeOrmModule],
 })
 export class UserModule {}

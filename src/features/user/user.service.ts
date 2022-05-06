@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CatalogService } from '../catalog/catalog.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ShoppingCartDto } from './dto/shopping-cart.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
@@ -9,6 +11,7 @@ import { User } from './entities/user.entity';
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    private catalogService: CatalogService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -17,7 +20,7 @@ export class UserService {
   }
 
   async findAll() {
-    return await this.userRepository.find({ relations: ['roles'] });
+    return await this.userRepository.find({ relations: ['catalogs'] });
   }
 
   async findOne(id: number) {
@@ -35,6 +38,19 @@ export class UserService {
   }
 
   getUserByEmail(email: string) {
-    return this.userRepository.findOne({ where: { email } }); // поиск пользователя по email
+    return this.userRepository.findOne({
+      where: { email },
+      relations: ['roles'],
+    }); // поиск пользователя по email
+  }
+
+  async addInCart(userId: number, shoppingCartDto: ShoppingCartDto) {
+    const catalogs = await this.catalogService.findByIds(
+      // поиск массива машин по id
+      shoppingCartDto.carsIds,
+    );
+    const user = await this.userRepository.findOne(userId); // поик пользователя
+    const userCart = await this.userRepository.save({ ...user, catalogs }); //сохраняем машины у пользователя
+    return userCart.catalogs;
   }
 }

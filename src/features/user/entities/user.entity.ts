@@ -1,6 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Catalog } from 'src/features/catalog/entities/catalog.entity';
 import { Role } from 'src/features/roles/entities/role.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity() // что возвращает на выходе
 export class User {
@@ -29,4 +37,8 @@ export class User {
 
   @ManyToOne(() => Role, () => (role) => role.users)
   roles: Role[];
+
+  @ManyToMany(() => Catalog, (catalog) => catalog.users)
+  @JoinTable()
+  catalogs: Catalog[];
 }
