@@ -12,7 +12,6 @@ import { CatalogModule } from '../catalog/catalog.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Catalog, Role]),
-    RolesModule,
     forwardRef(() => AuthModule),
     RolesModule,
     forwardRef(() => CatalogModule),

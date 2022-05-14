@@ -21,6 +21,7 @@ import { User } from './entities/user.entity';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { ShoppingCartDto } from './dto/shopping-cart.dto';
+import { UserDto, UserListDto } from './user.mapper';
 
 @ApiTags('Пользователи') //Тег
 @Controller('user')
@@ -39,20 +40,16 @@ export class UserController {
   @Get()
   @ApiOperation({ summary: 'Получение всех пользователей' })
   @ApiResponse({ status: 200, type: [User] })
-  async findAll(): Promise<Partial<User>[]> {
+  async findAll(): Promise<UserListDto> {
     const users: User[] = await this.userService.findAll();
-    const usersWithoutPass = users.map(function (userObj) {
-      const { password, ...rest } = userObj;
-      return rest;
-    });
-    return usersWithoutPass;
+    return new UserListDto(users);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Получение пользователя по id' })
   @UseGuards(JwtAuthGuard)
   @ApiResponse({ status: 200, type: User })
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<UserDto> {
     const user: User = await this.userService.findOne(+id);
     if (!user) {
       throw new HttpException(
@@ -60,8 +57,7 @@ export class UserController {
         HttpStatus.NOT_FOUND,
       );
     }
-    const { password, ...rest } = user;
-    return rest;
+    return new UserDto(user);
   }
 
   @Put(':id')
@@ -77,14 +73,15 @@ export class UserController {
         HttpStatus.NOT_FOUND,
       );
     }
-    return this.userService.update(+id, updateUserDto);
+    const updatedUser = await this.userService.update(+id, updateUserDto);
+    return new UserDto(updatedUser);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Удаление пользователя по id' })
   @ApiResponse({ status: 200, type: User })
   @UseGuards(JwtAuthGuard)
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string): Promise<UserDto> {
     const user: User = await this.userService.findOne(+id);
     if (!user) {
       throw new HttpException(
@@ -92,6 +89,6 @@ export class UserController {
         HttpStatus.NOT_FOUND,
       );
     }
-    return this.userService.remove(+id);
+    return this.userService.remove(+id).then(() => new UserDto(user));
   }
 }

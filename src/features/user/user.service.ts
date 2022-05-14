@@ -33,8 +33,7 @@ export class UserService {
   }
 
   remove(id: number) {
-    this.userRepository.delete(id);
-    return this.userRepository.findOne(id);
+    return this.userRepository.delete(id);
   }
 
   getUserByEmail(email: string) {

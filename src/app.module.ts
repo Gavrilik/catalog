@@ -15,7 +15,7 @@ import { RolesModule } from './features/roles/roles.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.POSTGRESS_HOST,
-      port: Number(process.env.POSTGRESS_PORT), // преобразование в число тк с файла достаем строку
+      port: +process.env.POSTGRESS_PORT, // преобразование в число тк с файла достаем строку
       username: process.env.POSTGRESS_USER,
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRESS_DB,
